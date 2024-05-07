@@ -16,7 +16,7 @@ export const repositoryName =
 const routes = [
   {
     type: "article",
-    path: "/articles/:uid",
+    path: "/blog/:uid",
   },
   {
     type: "page",

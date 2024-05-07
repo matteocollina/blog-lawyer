@@ -2,8 +2,9 @@ import * as prismic from "@prismicio/client";
 
 import { createClient } from "@/prismicio";
 import { Layout } from "@/components/Layout";
-import { Bounded } from "@/components/Bounded";
-import { Article } from "@/components/Article";
+import { notFound } from "next/navigation";
+import { SliceZone } from "@prismicio/react";
+import { components } from "@/slices";
 
 export async function generateMetadata() {
   const client = createClient();
@@ -16,15 +17,11 @@ export async function generateMetadata() {
 
 export default async function Index() {
   const client = createClient();
-
-  const articles = await client.getAllByType("article", {
-    orderings: [
-      { field: "my.article.publishDate", direction: "desc" },
-      { field: "document.first_publication_date", direction: "desc" },
-    ],
-  });
   const navigation = await client.getSingle("navigation");
   const settings = await client.getSingle("settings");
+
+  const uuidHome = "home"
+  const page = await client.getByUID("page", uuidHome).catch(() => notFound());
 
   return (
     <Layout
@@ -32,13 +29,7 @@ export default async function Index() {
       navigation={navigation}
       settings={settings}
     >
-      <Bounded size="widest">
-        <ul className="grid grid-cols-1 gap-16">
-          {articles.map((article) => (
-            <Article key={article.id} article={article} />
-          ))}
-        </ul>
-      </Bounded>
+        <SliceZone slices={page.data.slices} components={components} />
     </Layout>
   );
 }

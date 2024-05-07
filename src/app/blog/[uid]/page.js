@@ -86,7 +86,7 @@ export default async function Page({ params }) {
       settings={settings}
     >
       <Bounded>
-        <Link href="/" className="font-semibold tracking-tight text-slate-400">
+        <Link href="/blog" className="font-semibold tracking-tight text-slate-400">
           &larr; Torna agli articoli
         </Link>
       </Bounded>

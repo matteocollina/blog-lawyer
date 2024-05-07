@@ -56,8 +56,7 @@ interface ArticleDocumentData {
    * - **Tab**: Main
    * - **Documentation**: https://prismic.io/docs/field#slices
    */
-  slices: prismic.SliceZone<ArticleDocumentDataSlicesSlice>
-  /**
+  slices: prismic.SliceZone<ArticleDocumentDataSlicesSlice> /**
    * Meta Title field in *Article*
    *
    * - **Field Type**: Text
@@ -205,8 +204,7 @@ interface PageDocumentData {
    * - **Tab**: Main
    * - **Documentation**: https://prismic.io/docs/field#slices
    */
-  slices: prismic.SliceZone<PageDocumentDataSlicesSlice>
-  /**
+  slices: prismic.SliceZone<PageDocumentDataSlicesSlice> /**
    * Meta Title field in *Page*
    *
    * - **Field Type**: Text
@@ -362,6 +360,61 @@ type ContactFormSliceVariation = ContactFormSliceDefault;
 export type ContactFormSlice = prismic.SharedSlice<
   "contact_form",
   ContactFormSliceVariation
+>;
+
+/**
+ * Primary content in *Griglia → Primary*
+ */
+export interface GrigliaSliceDefaultPrimary {
+  /**
+   * icon field in *Griglia → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: griglia.primary.icon
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  icon: prismic.ImageField<never>;
+
+  /**
+   * text field in *Griglia → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: griglia.primary.text
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  text: prismic.RichTextField;
+}
+
+/**
+ * Default variation for Griglia Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type GrigliaSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<GrigliaSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *Griglia*
+ */
+type GrigliaSliceVariation = GrigliaSliceDefault;
+
+/**
+ * Griglia Shared Slice
+ *
+ * - **API ID**: `griglia`
+ * - **Description**: Griglia
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type GrigliaSlice = prismic.SharedSlice<
+  "griglia",
+  GrigliaSliceVariation
 >;
 
 /**
@@ -560,24 +613,35 @@ declare module "@prismicio/client" {
     export type {
       ArticleDocument,
       ArticleDocumentData,
+      ArticleDocumentDataSlicesSlice,
       NavigationDocument,
       NavigationDocumentData,
+      NavigationDocumentDataLinksItem,
       PageDocument,
       PageDocumentData,
+      PageDocumentDataSlicesSlice,
       SettingsDocument,
       SettingsDocumentData,
       AllDocumentTypes,
       ContactFormSlice,
       ContactFormSliceVariation,
       ContactFormSliceDefault,
+      GrigliaSlice,
+      GrigliaSliceDefaultPrimary,
+      GrigliaSliceVariation,
+      GrigliaSliceDefault,
       ImageSlice,
+      ImageSliceDefaultPrimary,
+      ImageSliceWidePrimary,
       ImageSliceVariation,
       ImageSliceDefault,
       ImageSliceWide,
       QuoteSlice,
+      QuoteSliceDefaultPrimary,
       QuoteSliceVariation,
       QuoteSliceDefault,
       TextSlice,
+      TextSliceDefaultPrimary,
       TextSliceVariation,
       TextSliceDefault,
     };

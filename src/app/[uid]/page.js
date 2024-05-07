@@ -6,6 +6,9 @@ import { createClient } from "@/prismicio";
 import { components } from "@/slices";
 import { Layout } from "@/components/Layout";
 
+import { Bounded } from "@/components/Bounded";
+import { Article } from "@/components/Article";
+
 export async function generateMetadata({ params }) {
   const client = createClient();
   const settings = await client.getSingle("settings");
@@ -31,18 +34,41 @@ export async function generateMetadata({ params }) {
 
 export default async function Page({ params }) {
   const client = createClient();
-
-  const page = await client
-    .getByUID("page", params.uid)
-    .catch(() => notFound());
   const navigation = await client.getSingle("navigation");
   const settings = await client.getSingle("settings");
 
-  return (
-    <Layout navigation={navigation} settings={settings}>
-      <SliceZone slices={page.data.slices} components={components} />
-    </Layout>
-  );
+
+  if(params.uid==="blog"){
+    const articles = await client.getAllByType("article", {
+      orderings: [
+        { field: "my.article.publishDate", direction: "desc" },
+        { field: "document.first_publication_date", direction: "desc" },
+      ],
+    });  
+    return (
+      <Layout
+        withHeaderDivider={false}
+        navigation={navigation}
+        settings={settings}
+      >
+        <Bounded size="widest">
+          <ul className="grid grid-cols-1 gap-16">
+            {articles.map((article) => (
+              <Article key={article.id} article={article} />
+            ))}
+          </ul>
+        </Bounded>
+      </Layout>
+    );
+  }else{
+    const page = await client.getByUID("page", params.uid).catch(() => notFound());
+    return (
+      <Layout navigation={navigation} settings={settings}>
+        <SliceZone slices={page.data.slices} components={components} />
+      </Layout>
+    );
+  }
+  
 }
 
 export async function generateStaticParams() {
